@@ -1,0 +1,12 @@
+services:
+  ptt-watcher:
+    build: .
+    container_name: ptt-watcher
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - my-ai-bot_n8n_net
+
+networks:
+  my-ai-bot_n8n_net:
+    external: true

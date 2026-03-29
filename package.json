@@ -1,0 +1,10 @@
+{
+  "name": "ptt-watcher",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "ws": "^8.0.0",
+    "axios": "^1.6.0",
+    "iconv-lite": "^0.6.3"
+  }
+}
