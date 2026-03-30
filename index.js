@@ -38,10 +38,25 @@ function processMailBuffer() {
     console.log('[mail] 初始化完成:', count);
   } else if (count > lastMailCount) {
     console.log(`[mail] 有新信！從 ${lastMailCount} 增加到 ${count}`);
+    const lines = c.split('\n');
+    let latestTitle = '（無法取得標題）';
+    for (const line of lines) {
+      if (line.match(/^\s*●?\s*\d+\s/)) {
+        const parts = line.trim().split(/\s+/);
+        const titleStart = line.indexOf(parts[3]) + parts[3].length;
+        const title = line.slice(titleStart).trim().replace(/^[◇◆\s]+/, '');
+        if (title) latestTitle = title;
+      }
+    }
+
+    // 台灣時間 UTC+8
+    const now = new Date();
+    const twTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+    const twTimeStr = twTime.toISOString().replace('T', ' ').slice(0, 19);
+
     axios.post(N8N_WEBHOOK, {
-      author: '(PTT)',
-      title: `您有新的 PTT 站內信`,
-      date: new Date().toISOString()
+      title: latestTitle,
+      date: twTimeStr
     }).catch(e => console.error('[webhook error]', e.message));
     lastMailCount = count;
   } else {
